@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prometheus — Pitch Deck</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a1a;
+            --bg-card: rgba(255, 255, 255, 0.04);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --accent: #6C5CE7;
+            --accent2: #00D2FF;
+            --accent3: #FF6B6B;
+            --accent4: #00E676;
+            --text-primary: #F0F0F5;
+            --text-secondary: rgba(240, 240, 245, 0.6);
+            --text-muted: rgba(240, 240, 245, 0.35);
+            --gradient-1: linear-gradient(135deg, #6C5CE7 0%, #00D2FF 100%);
+            --gradient-2: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+            --gradient-3: linear-gradient(135deg, #00E676 0%, #00D2FF 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .deck {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 80px;
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            pointer-events: none;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        .slide.prev {
+            opacity: 0;
+            transform: translateX(-40px);
+        }
+
+        /* Typography */
+        .slide-number {
+            position: absolute;
+            top: 30px;
+            left: 80px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .logo-mark {
+            position: absolute;
+            top: 28px;
+            right: 80px;
+            font-size: 14px;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 52px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        h1.hero {
+            font-size: 72px;
+            letter-spacing: -2px;
+        }
+
+        h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--accent2);
+        }
+
+        .subtitle {
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        .subtitle-sm {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-text-2 {
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-text-3 {
+            background: var(--gradient-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Cards & Grids */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 28px;
+            transition: background 0.3s;
+        }
+
+        .card:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .card h3 {
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .stat-big {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-med {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Table */
+        .s-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .s-table th {
+            text-align: left;
+            padding: 10px 14px;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .s-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-secondary);
+        }
+
+        .s-table td:first-child {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .s-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .highlight-row td {
+            background: rgba(108, 92, 231, 0.08);
+            color: var(--text-primary) !important;
+            font-weight: 600 !important;
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+
+        .tag-purple {
+            background: rgba(108, 92, 231, 0.2);
+            color: #a89af7;
+        }
+
+        .tag-blue {
+            background: rgba(0, 210, 255, 0.15);
+            color: #6be0ff;
+        }
+
+        .tag-green {
+            background: rgba(0, 230, 118, 0.15);
+            color: #6bff9e;
+        }
+
+        .tag-red {
+            background: rgba(255, 107, 107, 0.15);
+            color: #ffa4a4;
+        }
+
+        .tag-yellow {
+            background: rgba(255, 230, 109, 0.15);
+            color: #ffe66d;
+        }
+
+        /* Channel icons */
+        .channel-bar {
+            display: flex;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .channel-item {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 16px 20px;
+            flex: 1;
+            text-align: center;
+        }
+
+        .channel-item .icon {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .channel-item .label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Progress bar */
+        .timeline-bar {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin: 24px 0;
+        }
+
+        .timeline-segment {
+            flex: 1;
+            height: 8px;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .timeline-segment .tl-label {
+            position: absolute;
+            top: 16px;
+            left: 0;
+            font-size: 11px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .timeline-segment .tl-title {
+            position: absolute;
+            bottom: 16px;
+            left: 0;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        /* Navigation */
+        .nav-bar {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(10, 10, 26, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 40px;
+            padding: 8px 20px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: transparent;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-counter {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .nav-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .nav-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            transition: background 0.3s, width 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-dot.active {
+            background: var(--accent);
+            width: 18px;
+            border-radius: 3px;
+        }
+
+        /* Decorative */
+        .glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .glow-purple {
+            background: #6C5CE7;
+            top: -100px;
+            right: -100px;
+        }
+
+        .glow-blue {
+            background: #00D2FF;
+            bottom: -150px;
+            left: -100px;
+        }
+
+        /* Lists */
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding: 8px 0 8px 24px;
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .bullet-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 15px;
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            background: var(--accent);
+        }
+
+        .divider {
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+            margin-bottom: 24px;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .w-60 {
+            width: 58%;
+        }
+
+        .w-40 {
+            width: 38%;
+        }
+
+        .mb-8 {
+            margin-bottom: 8px;
+        }
+
+        .mb-16 {
+            margin-bottom: 16px;
+        }
+
+        .mb-24 {
+            margin-bottom: 24px;
+        }
+
+        .mb-32 {
+            margin-bottom: 32px;
+        }
+
+        .mt-16 {
+            margin-top: 16px;
+        }
+
+        .mt-24 {
+            margin-top: 24px;
+        }
+
+        .text-sm {
+            font-size: 13px;
+        }
+
+        .text-xs {
+            font-size: 11px;
+        }
+
+        .text-muted {
+            color: var(--text-muted);
+        }
+
+        .quote-box {
+            border-left: 3px solid var(--accent);
+            padding: 16px 20px;
+            background: rgba(108, 92, 231, 0.06);
+            border-radius: 0 12px 12px 0;
+            margin: 16px 0;
+            font-size: 15px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .cta-box {
+            background: var(--gradient-1);
+            border-radius: 16px;
+            padding: 32px 40px;
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .cta-box h2 {
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .cta-box p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="deck" id="deck">
+
+        <!-- SLIDE 1: COVER -->
+        <div class="slide active" id="slide-0">
+            <div class="glow glow-purple"></div>
+            <div class="glow glow-blue"></div>
+            <div style="margin-bottom: 24px;">
+                <span class="tag tag-purple">CONFIDENCIAL</span>
+                <span class="tag tag-blue">SEED ROUND</span>
+            </div>
+            <h1 class="hero"><span class="gradient-text">Prometheus</span></h1>
+            <p class="subtitle">CRM de Cobranza AI Omnicanal<br>para Las Américas</p>
+            <div style="margin-top: 32px; display: flex; gap: 32px;">
+                <div>
+                    <p class="stat-label">Mercado Objetivo</p>
+                    <p class="stat-med gradient-text">USD 127-374M</p>
+                </div>
+                <div>
+                    <p class="stat-label">Ventaja Competitiva</p>
+                    <p class="stat-med gradient-text-3">Bilingüe + Omnicanal AI</p>
+                </div>
+            </div>
+            <p style="margin-top: 48px; font-size: 13px; color: var(--text-muted);">Febrero 2026 · Proyecto Prometheus ·
+                Ronda Seed</p>
+        </div>
+
+        <!-- SLIDE 2: THE PROBLEM -->
+        <div class="slide" id="slide-1">
+            <div class="glow glow-purple"></div>
+            <span class="slide-number">02 · El Problema</span>
+            <span class="logo-mark">PROMETHEUS</span>
+            <h1>La cobranza en LATAM<br>está <span class="gradient-text-2">rota</span></h1>
+            <p class="subtitle-sm mb-24">Los originadores de crédito en América Latina gestionan su cartera con
+                herramientas de decadas pasadas, solo la minoría se ha modernizado.</p>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="stat-big gradient-text-2">70%</div>
+                    <p class="stat-label mb-8">usan Excel + llamadas manuales</p>
+                    <p style="font-size: 13px; color: var(--text-muted);">El "Status Quo" es el competidor #1 — no un
+                        software rival</p>
+                </div>
+                <div class="card">
+                    <div class="stat-big gradient-text-2">USD 1,500M+</div>
+                    <p class="stat-label mb-8">gasto en servicios de cobranza LATAM</p>
+                    <p style="font-size: 13px; color: var(--text-muted);">Call centers, BPOs y equipos internos —
+                        presupuesto que se puede desplazar con AI</p>
+                </div>
+                <div class="card">
+                    <div class="stat-big gradient-text-2">10-30%</div>
+                    <p class="stat-label mb-8">tasa de morosidad promedio</p>
+                    <p style="font-size: 13px; color: var(--text-muted);">Fintechs creciendo rápido pero sin
+                        herramientas para gestionar cartera a escala</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: THE SOLUTION -->
+        <div class="slide" id="slide-2">
+            <span class="slide-number">03 · La Solución</span>
+            <span class="logo-mark">PROMETHEUS</span>
+            <h1><span class="gradient-text">Cobranza AI</span><br>que reemplaza gestores humanos</h1>
+            <p class="subtitle-sm mb-16">Prometheus es un CRM de cobranza con AI omnicanal que multiplica la capacidad
+                de los equipos de cobranza existentes.</p>
+            <div class="channel-bar">
+                <div class="channel-item">
+                    <div class="icon">💬</div>
+                    <div class="label">WhatsApp AI</div>
+                </div>
+                <div class="channel-item">
+                    <div class="icon">📱</div>
+                    <div class="label">SMS</div>
+                </div>
+                <div class="channel-item">
+                    <div class="icon">📧</div>
+                    <div class="label">Email</div>
+                </div>
+                <div class="channel-item">
+                    <div class="icon">📞</div>
+                    <div class="label">Llamadas AI</div>
+                </div>
+                <div class="channel-item" style="border-color: var(--accent); background: rgba(108,92,231,0.1);">
+                    <div class="icon">🔄</div>
+                    <div class="label" style="color: var(--accent2);">Orquestación<br>Omnicanal</div>
+                </div>
+            </div>
+            <div class="quote-box">
+                "Tu equipo de 5 gestores rinde como 50 con Prometheus" — No reemplazamos al humano, multiplicamos su
+                capacidad.
+            </div>
+        </div>
+
+        <!-- SLIDE 4: OMNICHANNEL ADVANTAGE -->
+        <div class="slide" id="slide-3">
+            <span class="slide-number">04 · Diferenciador Clave</span>
+            <span class="logo-mark">PROMETHEUS</span>
+            <h2>Omnicanal ≠ Multicanal</h2>
+            <p class="subtitle-sm mb-24">El contexto viaja entre canales. Si el cliente responde por WhatsApp, la
+                llamada AI lo sabe.</p>
+            <div class="grid-2">
+                <div class="card" style="border-color: rgba(255,107,107,0.3);">
+                    <h3 style="color: var(--accent3);">❌ Multicanal (competidores)</h3>
+                    <ul class="bullet-list">
+                        <li>Canales operan en silos</li>
+                        <li>Cliente repite información</li>
+                        <li>Sin historial unificado</li>
+                        <li>Mensajes inconsistentes</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-color: rgba(0,230,118,0.3);">
+                    <h3 style="color: var(--accent4);">✅ Omnicanal (Prometheus)</h3>
+                    <ul class="bullet-list">
+                        <li>Contexto compartido entre canales</li>
+                        <li>Escalamiento inteligente (WPP → SMS → Llamada)</li>
+                        <li>Audit trail centralizado</li>
+                        <li>+30-50% eficiencia, -60% riesgo compliance</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="mt-16 text-sm text-muted">Fuente: TrueAccord Research 2024, FICO Collections Best Practices,
+                Finview.ai</p>
+        </div>
+
+        <!-- SLIDE 5: MARKET SIZE -->
+        <div class="slide" id="slide-4">
+            <span class="slide-number">05 · Mercado</span>
+            <span class="logo-mark">PROMETHEUS</span>
+            <h2>Un mercado de <span class="gradient-text">USD 127-374M</span> <span
+                    style="font-size: 18px; color: var(--text-muted);">(ya filtrado)</span></h2>
+            <p class="subtitle-sm mb-16"><strong>Ambas columnas</strong> ya están filtradas: solo originadores de
+                crédito, segmento mid-market. El mercado global de software de cobranza es USD 5.5B y servicios en
+                CO+MX+US supera USD 1B.</p>
+            <table class="s-table">
+                <tr>
+                    <th>Mercado</th>
+                    <th>Software (filtrado por vertical + segmento)</th>
+                    <th>Servicios Desplazables por AI (10-20% del total)</th>
+                    <th>TAM Addressable</th>
+                </tr>
+                <tr>
+                    <td>🇨🇴 Colombia</td>
+                    <td>USD 2-4M <span style="font-size:10px;color:var(--text-muted);">(de $8-12M)</span></td>
+                    <td>USD 5-14M</td>
+                    <td><strong>USD 7-18M</strong></td>
+                </tr>
+                <tr>
+                    <td>🇲🇽 México</td>
+                    <td>USD 5-10M <span style="font-size:10px;color:var(--text-muted);">(de $58M)</span></td>
+                    <td>USD 11-33M</td>
+                    <td><strong>USD 16-43M</strong></td>
+                </tr>
+                <tr>
+                    <td>🇺🇸 EE.UU. (bilingüe)</td>
+                    <td>USD 50-150M <span style="font-size:10px;color:var(--text-muted);">(de $1,860M)</span></td>
+                    <td>USD 54-163M</td>
+                    <td><strong>USD 104-313M</strong></td>
+                </tr>
+                <tr class="highlight-row">
+                    <td>TOTAL</td>
+                    <td>USD 57-164M</td>
+                    <td>USD 70-210M</td>
+                    <td><strong>USD 127-374M</strong></td>
+                </tr>
+            </table>
+            <p class="mt-16 text-sm text-muted">⚠ Filtros aplicados: solo vertical crédito (excl. utilities/telcos) y
+                segmento mid-market (excl. Fortune 500). Cifras entre paréntesis = mercado sin filtrar (fuente: Straits
+                Research, IMARC). CAGR 9-20%.</p>
+        </div>
+
+        <!-- SLIDE 6: SAM/SOM -->
+        <div class="slide" id="slide-5">
+            <span class="slide-number">06 · SAM / SOM</span>
+            <span class="logo-mark">PROMETHEUS</span>
+            <div class="flex-between">
+                <div class="w-60">
+                    <h2>Bottom-Up: <span class="gradient-text">400+ empresas target</span></h2>
+                    <p class="subtitle-sm mb-16">Fintechs, cooperativas y microfinancieras con 500+ cuentas a gestionar.
+                    </p>
+                    <table class="s-table">
+                        <tr>
+                            <th>Segmento</th>
+                            <th>Colombia</th>
+                            <th>México</th>
+                        </tr>
+                        <tr>
+                            <td>Fintechs de crédito</td>
+                            <td>100-195</td>
+                            <td>175-375</td>
+                        </tr>
+                        <tr>
+                            <td>Cooperativas / MFIs</td>
+                            <td>40-80</td>
+                            <td>90-155</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td>Total empresas target</td>
+                            <td>140-275</td>
+                            <td>265-530</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="w-40">
+                    <div class="card" style="text-align: center;">
+                        <p class="stat-label">SAM LATAM (CO+MX)</p>
+                        <div class="stat-big gradient-text">$7.6-14.9M</div>
+                    </div>
+                    <div class="card mt-16" style="text-align: center;">
+                        <p class="stat-label">SAM Total (+ US)</p>
+                        <div class="stat-big gradient-text">$13.2-25.9M</div>
+                    </div>
+                    <div class="card mt-16" style="text-align: center;">
+                        <p class="stat-label">SOM Yr1 (% SAM)</p>
+                        <div class="stat-big gradient-text-3">2.8%</div>
+                        <p class="text-xs text-muted">12 clientes · Conservador y creíble</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: WHY NOW -->
+        <div class="slide" id="slide-6">
+            <span class="slide-number">07 · Por Qué Ahora</span>
+            <span class="logo-mark">PROMETHEUS</span>
+            <h2>Punto de inflexión: <span class="gradient-text-3">AI + Regulación + Capital</span></h2>
+            <p class="subtitle-sm mb-24">3 fuerzas convergen para crear la oportunidad perfecta.</p>
+            <div class="grid-3">
+                <div class="card">
+                    <h3>🤖 AI Collections Mainstream</h3>
+                    <p>USD 100M+ de VC funding en AI collections en el último ciclo. AI pasó de "nice-to-have" a
+                        "must-have".</p>
+                </div>
+                <div class="card">
+                    <h3>📱 WhatsApp Dominante</h3>
+                    <p>85%+ de adopción en LATAM. WhatsApp Business API madura y lista para cobranza a escala.</p>
+                </div>
+                <div class="card">
+                    <h3>🏦 Fintechs Creciendo</h3>
+                    <p>700+ fintechs en CO, 1,000+ en MX. Crecen rápido pero sin herramientas de gestión de cartera.</p>
+                </div>
+            </div>
+            <div class="quote-box mt-24">
+                ⏰ La ventana de first-mover en LATAM es de <strong>12-18 meses máximo</strong>. Después, incumbents
+                agregan AI a sus plataformas existentes.
+            </div>
+        </div>
+
+        <!-- SLIDE 8: COMPETITION -->
+        <div class="slide" id="slide-7">
+            <span class="slide-number">08 · Competencia</span>
+            <span class="logo-mark">PROMETHEUS</span>
+            <h2>Nadie ocupa <span class="gradient-text">nuestro nicho</span></h2>
+            <p class="subtitle-sm mb-16">El white space: bilingüe (ES/EN) + omnicanal AI + mid-market LATAM.</p>
+            <table class="s-table">
+                <tr>
+                    <th>Competidor</th>
+                    <th>Mercado</th>
+                    <th>AI?</th>
+                    <th>Omnicanal?</th>
+                    <th>Bilingüe?</th>
+                    <th>Mid-Market LATAM?</th>
+                </tr>
+                <tr>
+                    <td>TrueAccord</td>
+                    <td>🇺🇸 Enterprise</td>
+                    <td>✅</td>
+                    <td>❌ No voz</td>
+                    <td>❌ EN only</td>
+                    <td>❌</td>
+                </tr>
+                <tr>
+                    <td>Skit.ai</td>
+                    <td>🇺🇸 Contact Centers</td>
+                    <td>✅</td>
+                    <td>❌ Solo voz</td>
+                    <td>❌ EN only</td>
+                    <td>❌</td>
+                </tr>
+                <tr>
+                    <td>Colektia</td>
+                    <td>🇨🇴 SMB</td>
+                    <td>✅</td>
+                    <td>?</td>
+                    <td>🟡 ES only</td>
+                    <td>🟡</td>
+                </tr>
+                <tr>
+                    <td>Moonflow</td>
+                    <td>🇵🇪 Fintechs</td>
+                    <td>✅</td>
+                    <td>?</td>
+                    <td>🟡 ES only</td>
+                    <td>🟡</td>
+                </tr>
+                <tr class="highlight-row">
+                    <td>🚀 Prometheus</td>
+                    <td>CO+MX+US</td>
+                    <td>✅ Nativo</td>
+                    <td>✅ 4 canales</td>
+                    <td>✅ ES+EN</td>
+                    <td>✅</td>
+                </tr>
+            </table>
+            <p class="mt-16 text-sm"><span class="tag tag-green">WHITE SPACE</span> Cobranza AI omnicanal integrada +
+                bilingüe nativo = gap que <strong>nadie</strong> llena hoy</p>
+        </div>
+
+        <!-- SLIDE 9: BUSINESS MODEL -->
+        <div class="slide" id="slide-8">
+            <span class="slide-number">09 · Modelo de Negocio</span>
+            <span class="logo-mark">PROMETHEUS</span>
+            <h2>SaaS + Usage: <span class="gradient-text">predecible y escalable</span></h2>
+            <div class="grid-3 mt-24">
+                <div class="card" style="border-top: 3px solid var(--accent);">
+                    <h3 style="color: var(--accent);">STARTER</h3>
+                    <div class="stat-med gradient-text mb-8">$990<span style="font-size: 16px;">/mes</span></div>
+                    <p>500 cuentas a gestionar</p>
+                    <p class="text-sm text-muted mt-16">WhatsApp + SMS + Email + Dashboard<br>Ideal para fintechs
+                        early-stage</p>
+                </div>
+                <div class="card" style="border-top: 3px solid var(--accent2);">
+                    <h3 style="color: var(--accent2);">GROWTH</h3>
+                    <div class="stat-med gradient-text mb-8">$2,490<span style="font-size: 16px;">/mes</span></div>
+                    <p>5,000 cuentas a gestionar</p>
+                    <p class="text-sm text-muted mt-16">Todo Starter + Llamadas AI + Orquestación avanzada + Analytics
+                    </p>
+                </div>
+                <div class="card" style="border-top: 3px solid var(--accent4);">
+                    <h3 style="color: var(--accent4);">ENTERPRISE</h3>
+                    <div class="stat-med gradient-text mb-8">$6,990<span style="font-size: 16px;">/mes</span></div>
+                    <p>25,000+ cuentas a gestionar</p>
+                    <p class="text-sm text-muted mt-16">Todo Growth + API dedicada + SLA + Custom integrations</p>
+                </div>
+            </div>
+            <p class="mt-24 text-sm text-muted">Revenue mix: 80-90% base fija SaaS + 10-20% usage fees (canales).
+                Contrato anual con pago mensual.</p>
+        </div>
+
+        <!-- SLIDE 10: UNIT ECONOMICS -->
+        <div class="slide" id="slide-9">
+            <span class="slide-number">10 · Unit Economics</span>
+            <span class="logo-mark">PROMETHEUS</span>
+            <h2>Métricas que <span class="gradient-text-3">importan</span></h2>
+            <div class="grid-4 mt-24">
+                <div class="card" style="text-align: center;">
+                    <p class="stat-label">LTV:CAC</p>
+                    <div class="stat-big gradient-text-3">14x</div>
+                    <p class="text-xs text-muted">Benchmark: >3x bueno</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <p class="stat-label">CAC Blended</p>
+                    <div class="stat-big gradient-text">$2,500</div>
+                    <p class="text-xs text-muted">Pipeline built-in de cofounders</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <p class="stat-label">Payback Period</p>
+                    <div class="stat-big gradient-text-3">2.6<span style="font-size:20px;"> meses</span></div>
+                    <p class="text-xs text-muted">Benchmark: <12 bueno</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <p class="stat-label">Gross Margin</p>
+                    <div class="stat-big gradient-text">65%</div>
+                    <p class="text-xs text-muted">Target: >60% SaaS</p>
+                </div>
+            </div>
+            <div class="grid-2 mt-24">
+                <div class="card">
+                    <h3>Ventaja injusta en CAC</h3>
+                    <p>2 de los 5 cofounders tienen empresas con acceso directo a decenas de clientes potenciales. Los
+                        primeros 10-20 clientes tienen CAC cercano a USD 0.</p>
+                </div>
+                <div class="card">
+                    <h3>LTV Conservador</h3>
+                    <p>LTV base: USD 35,100 (ARPU $1,500 × 65% GM × 36 meses). Con pipeline de cofounders, LTV:CAC
+                        podría superar 36x.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: FINANCIAL PROJECTIONS -->
+        <div class="slide" id="slide-10">
+            <span class="slide-number">11 · Proyecciones Financieras</span>
+            <span class="logo-mark">PROMETHEUS</span>
+            <h2>Rentable desde <span class="gradient-text-3">Año 1</span></h2>
+            <div class="grid-3 mt-16">
+                <div class="card" style="text-align: center;">
+                    <p class="stat-label">ARR Yr1</p>
+                    <div class="stat-med gradient-text">$216K</div>
+                    <p class="text-xs text-muted">12 clientes · ARPU $1,500</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <p class="stat-label">ARR Yr2</p>
+                    <div class="stat-med gradient-text">$684K</div>
+                    <p class="text-xs text-muted">30 clientes · ARPU $1,900</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <p class="stat-label">ARR Yr3</p>
+                    <div class="stat-med gradient-text">$1.52M</div>
+                    <p class="text-xs text-muted">55 clientes · ARPU $2,300</p>
+                </div>
+            </div>
+            <table class="s-table mt-24">
+                <tr>
+                    <th>Métrica</th>
+                    <th>Yr1</th>
+                    <th>Yr2</th>
+                    <th>Yr3</th>
+                </tr>
+                <tr>
+                    <td>Revenue</td>
+                    <td>USD 97K</td>
+                    <td>USD 430K</td>
+                    <td>USD 1.1M</td>
+                </tr>
+                <tr>
+                    <td>Costos</td>
+                    <td>USD 58K</td>
+                    <td>USD 239K</td>
+                    <td>USD 471K</td>
+                </tr>
+                <tr class="highlight-row">
+                    <td>Net Cash Flow</td>
+                    <td>+USD 39K</td>
+                    <td>+USD 191K</td>
+                    <td>+USD 629K</td>
+                </tr>
+                <tr>
+                    <td>Break-even</td>
+                    <td colspan="3">Mes 5-6 (base) — gracias a 0 salarios de cofounders</td>
+                </tr>
+            </table>
+            <p class="mt-16 text-sm text-muted">Escenario base. Cofounders sin salario Yr1-Yr2. Ingenieros MVP en option
+                pool.</p>
+        </div>
+
+        <!-- SLIDE 12: GO TO MARKET -->
+        <div class="slide" id="slide-11">
+            <span class="slide-number">12 · Go-to-Market</span>
+            <span class="logo-mark">PROMETHEUS</span>
+            <h2>Secuencia: <span class="gradient-text">CO → MX → US</span></h2>
+            <p class="subtitle-sm mb-24">Validar en Colombia (relaciones), escalar en México (mercado grande), monetizar
+                en EE.UU. (tickets altos).</p>
+            <div class="grid-3">
+                <div class="card" style="border-left: 3px solid var(--accent4);">
+                    <h3>🇨🇴 Fase 1: Colombia</h3>
+                    <p class="stat-label">M1-M6</p>
+                    <ul class="bullet-list" style="margin-top: 12px;">
+                        <li>Pipeline built-in de cofounders</li>
+                        <li>5-10 clientes iniciales</li>
+                        <li>Caso de estudio con ROI</li>
+                        <li>WhatsApp canal dominante (85%+)</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left: 3px solid var(--accent2);">
+                    <h3>🇲🇽 Fase 2: México</h3>
+                    <p class="stat-label">M4-M10</p>
+                    <ul class="bullet-list" style="margin-top: 12px;">
+                        <li>Mercado fintech más grande LATAM</li>
+                        <li>10-15 clientes</li>
+                        <li>Expansión con caso de CO</li>
+                        <li>Preparar terreno para US</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left: 3px solid var(--accent);">
+                    <h3>🇺🇸 Fase 3: EE.UU.</h3>
+                    <p class="stat-label">M14-M18</p>
+                    <ul class="bullet-list" style="margin-top: 12px;">
+                        <li>Ventaja bilingüe nativa (EN+ES)</li>
+                        <li>ARPU 3-5x más alto</li>
+                        <li>Requiere compliance TCPA/FDCPA</li>
+                        <li>Seed funding para escalar</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 13: TRACTION / PIPELINE -->
+        <div class="slide" id="slide-12">
+            <span class="slide-number">13 · Tracción y Pipeline</span>
+            <span class="logo-mark">PROMETHEUS</span>
+            <h2>Pipeline <span class="gradient-text-3">warm/hot</span> desde Day 1</h2>
+            <p class="subtitle-sm mb-24">No partimos de cold outbound. 2 de 5 cofunders tienen empresas con acceso
+                directo a clientes.</p>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="stat-big gradient-text-3 mb-8">10-20</div>
+                    <p class="stat-label mb-16">Clientes potenciales en pipeline inmediato</p>
+                    <p class="text-sm" style="color: var(--text-secondary);">Originadores de crédito, fintechs y
+                        cooperativas de las redes de 2 cofounders. Relaciones existentes = demos sin cold emailing.</p>
+                </div>
+                <div class="card">
+                    <h3>Ventaja de pipeline built-in</h3>
+                    <table class="s-table">
+                        <tr>
+                            <td>CAC para primeros clientes</td>
+                            <td><strong>~USD 0</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Ciclo de venta estimado</td>
+                            <td><strong>4-8 semanas</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Probabilidad de conversión</td>
+                            <td><strong>30-50%</strong> (warm leads)</td>
+                        </tr>
+                        <tr>
+                            <td>Caso de estudio objetivo</td>
+                            <td><strong>M5-M6</strong></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="quote-box mt-24">
+                Esta es una <strong>ventaja injusta</strong> que los VCs valoran enormemente. No necesitamos capital
+                para validar — necesitamos capital para escalar algo que ya funciona.
+            </div>
+        </div>
+
+        <!-- SLIDE 14: TEAM -->
+        <div class="slide" id="slide-13">
+            <span class="slide-number">14 · Equipo</span>
+            <span class="logo-mark">PROMETHEUS</span>
+            <h2>5 Cofounders. <span class="gradient-text">0 salarios.</span> <span class="gradient-text-3">100% skin in
+                    the game.</span></h2>
+            <p class="subtitle-sm" style="margin-bottom: 16px;">Experiencia directa en comunicaciones empresariales,
+                customer care a escala, y software engineering. Todos equity-only.</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div class="card" style="padding: 14px;">
+                    <h3 style="font-size: 14px; margin-bottom: 4px; color: var(--accent2);">Felipe Sánchez · CEO</h3>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Estrategia, Ventas & GTM
+                    </p>
+                    <ul class="bullet-list" style="font-size: 11.5px;">
+                        <li><strong>CEO & Co-Founder WeKall</strong> — 6+ años, 200+ empresas LATAM (voz, SMS, WhatsApp,
+                            AI)</li>
+                        <li><strong>Forbes 30 Startups Colombia</strong></li>
+                        <li><strong>Stanford GSB</strong> — Business Scaling Program</li>
+                        <li><strong>Angel Investor:</strong> Rockstart, 500 LatAm, Pacific Ventures, Prodigio Capital
+                        </li>
+                        <li><strong>Board:</strong> ANDI, Fedesoft, Celeru</li>
+                    </ul>
+                </div>
+                <div class="card" style="padding: 14px;">
+                    <h3 style="font-size: 14px; margin-bottom: 4px; color: var(--accent2);">Fabián Saavedra · COO</h3>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Operaciones, CX & Domain
+                        Expert</p>
+                    <ul class="bullet-list" style="font-size: 11.5px;">
+                        <li><strong>VP Customer Care DIRECTV LATAM</strong> — 25 años, 2,800 empleados, 6 países</li>
+                        <li><strong>Co-Founder WeKall</strong> — COO & CTO</li>
+                        <li><strong>Board:</strong> Celeru, Eficacia, MCC BPO. Presidente Cluster PacificShore</li>
+                        <li><strong>Profesor Postgrado</strong> Icesi — CX & Transformación Digital</li>
+                        <li><strong>SMU Cox</strong>, IAE Business School, U. de los Andes</li>
+                    </ul>
+                </div>
+                <div class="card" style="padding: 14px;">
+                    <h3 style="font-size: 14px; margin-bottom: 4px; color: var(--accent2);">John S. Urbano · CTO</h3>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Infraestructura & DevOps
+                    </p>
+                    <ul class="bullet-list" style="font-size: 11.5px;">
+                        <li><strong>Senior DevOps Engineer @ PROS</strong> — 4+ años</li>
+                        <li><strong>EveryMundo</strong> (Miami) — scalable systems from 0 to 15.53B requests
+                            per month</li>
+                        <li><strong>Globant</strong> — DevOps Engineer</li>
+                        <li><strong>Icesi</strong> — Ing. Informática y Telecomunicaciones</li>
+                    </ul>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+                <div class="card" style="padding: 14px;">
+                    <h3 style="font-size: 14px; margin-bottom: 4px; color: var(--accent2);">Sebastian Arango · Tech
+                        Lead/Architect
+                    </h3>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Engineering & Backend</p>
+                    <ul class="bullet-list" style="font-size: 11.5px;">
+                        <li><strong>Tech Lead @ Swiset</strong> — 3+ años (Java, Node.js, AWS)</li>
+                        <li><strong>Software Engineer Fridom</strong> — Flutter, blockchain</li>
+                        <li><strong>ML Research</strong> — web defacement detection (MobileNetV2)</li>
+                        <li><strong>Icesi</strong> — Ing. Sistemas de Software</li>
+                    </ul>
+                </div>
+                <div class="card" style="padding: 14px;">
+                    <h3 style="font-size: 14px; margin-bottom: 4px; color: var(--accent2);">Steven Ma Mei · Product
+                        Development Director
+                    </h3>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Cloud & Solutions
+                        Architecture</p>
+                    <ul class="bullet-list" style="font-size: 11.5px;">
+                        <li><strong>Solutions Architect @ Stride</strong> — 4 años (US remote)</li>
+                        <li><strong>Globant</strong> — Java Developer</li>
+                        <li><strong>TQ (Tecnoquímicas)</strong> — DevOps Engineer</li>
+                        <li><strong>Icesi</strong> — Ing. Sistemas de Software</li>
+                    </ul>
+                </div>
+                <div class="card" style="padding: 14px;">
+                    <h3 style="font-size: 14px; margin-bottom: 4px; color: var(--accent);">Ingenieros · Option Pool (4)
+                    </h3>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">7 devs totales en sprint
+                        MVP</p>
+                    <ul class="bullet-list" style="font-size: 11.5px;">
+                        <li><strong>Daniel Galvis</strong> — Sr. Eng (Adecco, ex-MercadoLibre, Perficient)</li>
+                        <li><strong>Bryan Grueso</strong> — Full Stack L4 (Akkodis, GCP/AWS, K8s)</li>
+                        <li><strong>Alejandra González</strong> — Sr. QA Automation (Perficient, 4+ años)</li>
+                        <li><strong>Juan M. López</strong> — Backend (Accenture, 5+ años, Java/.NET/Azure)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 15: PRODUCT ROADMAP -->
+        <div class="slide" id="slide-14">
+            <span class="slide-number">15 · Producto y Roadmap</span>
+            <span class="logo-mark">PROMETHEUS</span>
+            <h2>MVP funcional en <span class="gradient-text">3 meses</span>, revenue en 3 meses</h2>
+            <div class="grid-2 mt-24">
+                <div>
+                    <h3>MVP (M1-M3)</h3>
+                    <ul class="bullet-list">
+                        <li><strong>WhatsApp AI</strong> — canal dominante LATAM</li>
+                        <li><strong>SMS automatizado</strong> — recordatorios y seguimiento</li>
+                        <li><strong>Email AI</strong> — gestión formal de cartera</li>
+                        <li><strong>Llamadas AI</strong> — negociación para cuentas de alto valor</li>
+                        <li><strong>Dashboard</strong> — métricas y gestión de cuentas</li>
+                        <li><strong>Orquestación omnicanal</strong> — contexto unificado</li>
+                    </ul>
+                    <p class="mt-16 text-sm text-muted">Milestone M3: MVP Lite (3 canales texto) para demos tempranas
+                    </p>
+                </div>
+                <div>
+                    <h3>Post-MVP (M4-M12)</h3>
+                    <ul class="bullet-list">
+                        <li><strong>AI Scoring predictivo</strong> — priorización de cuentas</li>
+                        <li><strong>Self-service payment portal</strong> — canal de recuperación</li>
+                        <li><strong>Compliance pack EE.UU.</strong> — TCPA/FDCPA/Reg F</li>
+                        <li><strong>Modelos ML propios</strong> — reducir dependencia OpenAI</li>
+                        <li><strong>Integraciones core bancario</strong> — Mambu, Temenos, Cobis</li>
+                        <li><strong>Data network effect</strong> — scoring con datos LATAM</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 16: RISKS -->
+        <div class="slide" id="slide-15">
+            <span class="slide-number">16 · Riesgos y Mitigación</span>
+            <span class="logo-mark">PROMETHEUS</span>
+            <h2>Honestidad radical sobre <span class="gradient-text-2">riesgos</span></h2>
+            <table class="s-table mt-16">
+                <tr>
+                    <th>Riesgo</th>
+                    <th>Severidad</th>
+                    <th>Mitigación</th>
+                </tr>
+                <tr>
+                    <td>No product-market fit</td>
+                    <td><span class="tag tag-red">🔴 ALTA</span></td>
+                    <td>15 entrevistas de validación antes de invertir. Kill criteria: <3 LOIs=pivotar</td>
+                </tr>
+                <tr>
+                    <td>Status Quo gana</td>
+                    <td><span class="tag tag-red">🔴 ALTA</span></td>
+                    <td>Posicionar como "multiplicador" (no reemplazo). Demo ROI tangible</td>
+                </tr>
+                <tr>
+                    <td>MVP se retrasa</td>
+                    <td><span class="tag tag-yellow">🟡 MEDIA</span></td>
+                    <td>MVP Lite en M3 para demos. Concierge MVP como fallback</td>
+                </tr>
+                <tr>
+                    <td>Gross Margin < 50%</td>
+                    <td><span class="tag tag-yellow">🟡 MEDIA</span></td>
+                    <td>Usage fees para canales. ML propio post-MVP</td>
+                </tr>
+                <tr>
+                    <td>Competidor escala LATAM</td>
+                    <td><span class="tag tag-yellow">🟡 MEDIA</span></td>
+                    <td>Velocidad de ejecución + pipeline built-in = 12-18 meses de ventana</td>
+                </tr>
+            </table>
+            <div class="quote-box mt-16">
+                <strong>Kill criteria:</strong> Si en mes 6 tenemos <3 clientes pagando → pivotar. No quemamos capital
+                    en algo que no funciona. </div>
+            </div>
+
+            <!-- SLIDE 17: THE ASK -->
+            <div class="slide" id="slide-16">
+                <span class="slide-number">17 · La Propuesta</span>
+                <span class="logo-mark">PROMETHEUS</span>
+                <h2>Path A: <span class="gradient-text">Lean Validator</span></h2>
+                <p class="subtitle-sm mb-24">100% autofinanciado. Sin necesidad de pre-seed. El capital propio financia
+                    >24 meses de operación.</p>
+                <div class="grid-2">
+                    <div class="card" style="border: 1px solid rgba(0,230,118,0.3);">
+                        <h3 style="color: var(--accent4);">Autofinanciado (Path A)</h3>
+                        <table class="s-table">
+                            <tr>
+                                <td>Capital disponible</td>
+                                <td><strong>USD 100-150K</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Inversión MVP</td>
+                                <td><strong>USD 30-50K</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Break-even</td>
+                                <td><strong>M5-M6</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Runway sin revenue</td>
+                                <td><strong>22-33 meses</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Riesgo de dilution</td>
+                                <td><strong>Ninguno</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="card" style="border: 1px solid rgba(108,92,231,0.3);">
+                        <h3 style="color: var(--accent);">Seed (Path B) — Post Validación</h3>
+                        <table class="s-table">
+                            <tr>
+                                <td>Ask</td>
+                                <td><strong>USD 1-2M</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Timing</td>
+                                <td><strong>M10-M14</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Uso</td>
+                                <td>Escalar US + Compliance + Equipo</td>
+                            </tr>
+                            <tr>
+                                <td>Pre-condición</td>
+                                <td>≥5 clientes pagando + caso de estudio</td>
+                            </tr>
+                            <tr>
+                                <td>Narrativa</td>
+                                <td>"Ya rentables, queremos crecer más rápido"</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 18: CLOSING -->
+            <div class="slide" id="slide-17">
+                <div class="glow glow-purple"></div>
+                <div class="glow glow-blue"></div>
+                <span class="slide-number">18 · Cierre</span>
+                <h1 class="hero"><span class="gradient-text">Prometheus</span></h1>
+                <div class="divider" style="width: 100px;"></div>
+                <p class="subtitle">El CRM de cobranza AI omnicanal<br>para Las Américas</p>
+                <div class="grid-4 mt-24">
+                    <div style="text-align: center;">
+                        <div class="stat-med gradient-text">$127M+</div>
+                        <p class="stat-label">TAM Combinado</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="stat-med gradient-text-3">14x</div>
+                        <p class="stat-label">LTV:CAC</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="stat-med gradient-text">M5-6</div>
+                        <p class="stat-label">Break-even</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="stat-med gradient-text-3">$1.5M</div>
+                        <p class="stat-label">ARR Yr3</p>
+                    </div>
+                </div>
+                <div class="cta-box mt-24">
+                    <h2>¿Listo para conversar?</h2>
+                    <p>Lo que falta no es estrategia, no es capital, y no es equipo — <strong>es ejecución.</strong></p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- NAVIGATION -->
+        <div class="nav-bar">
+            <button class="nav-btn" id="prevBtn" onclick="prev()">←</button>
+            <div class="nav-dots" id="navDots"></div>
+            <span class="nav-counter" id="counter">1 / 18</span>
+            <button class="nav-btn" id="nextBtn" onclick="next()">→</button>
+        </div>
+
+        <script>
+            const totalSlides = 18;
+            let current = 0;
+
+            // Build dots
+            const dotsContainer = document.getElementById('navDots');
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goTo(i);
+                dotsContainer.appendChild(dot);
+            }
+
+            function updateSlide(direction) {
+                const slides = document.querySelectorAll('.slide');
+                const dots = document.querySelectorAll('.nav-dot');
+
+                slides.forEach((s, i) => {
+                    s.classList.remove('active', 'prev');
+                    if (i < current) s.classList.add('prev');
+                    else if (i === current) s.classList.add('active');
+                });
+
+                dots.forEach((d, i) => {
+                    d.classList.toggle('active', i === current);
+                });
+
+                document.getElementById('counter').textContent = `${current + 1} / ${totalSlides}`;
+            }
+
+            function next() {
+                if (current < totalSlides - 1) { current++; updateSlide('next'); }
+            }
+
+            function prev() {
+                if (current > 0) { current--; updateSlide('prev'); }
+            }
+
+            function goTo(i) {
+                current = i;
+                updateSlide();
+            }
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+                if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+                if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+                if (e.key === 'End') { e.preventDefault(); goTo(totalSlides - 1); }
+            });
+
+            // Touch/swipe support
+            let touchStartX = 0;
+            document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+            document.addEventListener('touchend', (e) => {
+                const diff = touchStartX - e.changedTouches[0].clientX;
+                if (Math.abs(diff) > 50) { diff > 0 ? next() : prev(); }
+            });
+        </script>
+
+</body>
+
+</html>
